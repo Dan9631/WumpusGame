@@ -2,23 +2,54 @@ import pygame
 import os
 
 class Jugador(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,path):
         super().__init__()
-        current_dir = os.path.dirname(__file__)  # Obtener el directorio actual del script
-        image_path = os.path.join(current_dir, '..', 'img', 'Player.png')  # Construir la ruta de la imagen
-        self.image = pygame.image.load(image_path).convert_alpha()  # Cargar imagen con transparencia
+        self.image = pygame.image.load(f'{path}/img/Player.png').convert_alpha()  # Cargar imagen con transparencia
         self.image = pygame.transform.scale(self.image,(70,70))  # Escalar la imagen
         self.rect = self.image.get_rect()  # Obtiene el rectángulo del sprite
         self.rect.y = 225
         self.rect.x = 35
+        self.key_states = {}
+        self.visited = [[False]*5 for _ in range(4)]
+
 
     def update(self):
         keys = pygame.key.get_pressed()
+
         if keys[pygame.K_w]:
-            self.rect.y -= 72 
+            # valida que la tecla seleccionada no se encuentre en el diccionario o este apagada, 
+            # Esto para permitir que solo se genere la accion una vez apesar que se mantenga presionada
+            # la tecla
+            if pygame.K_w not in self.key_states or not self.key_states[pygame.K_w]:
+                self.rect.y -= 72
+                self.key_states[pygame.K_w] = True
+        else:
+            self.key_states[pygame.K_w] = False
+
         if keys[pygame.K_s]:
-            self.rect.y += 72 
+            if pygame.K_s not in self.key_states or not self.key_states[pygame.K_s]:
+                self.rect.y += 72
+                self.key_states[pygame.K_s] = True
+        else:
+            self.key_states[pygame.K_s] = False
+
         if keys[pygame.K_a]:
-            self.rect.x -= 120 
+            if pygame.K_a not in self.key_states or not self.key_states[pygame.K_a]:
+                self.rect.x -= 120
+                self.key_states[pygame.K_a] = True
+        else:
+            self.key_states[pygame.K_a] = False
+
         if keys[pygame.K_d]:
-            self.rect.x += 120 
+            if pygame.K_d not in self.key_states or not self.key_states[pygame.K_d]:
+                self.rect.x += 120
+                self.key_states[pygame.K_d] = True
+        else:
+            self.key_states[pygame.K_d] = False
+
+        i = self.rect.y // 72
+        j = self.rect.x // 120
+        self.visited[i][j] = True
+        # print(f'{i}{j}---{self.visited[i][j]}')
+
+   
