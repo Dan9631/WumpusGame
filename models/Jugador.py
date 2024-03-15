@@ -1,11 +1,15 @@
 import pygame
-import os
+import random
+
 
 class Jugador(pygame.sprite.Sprite):
     def __init__(self,path):
         super().__init__()
+        self.name = ""
+        self.vidas = 1
+        self.municion = 1
         self.image = pygame.image.load(f'{path}/img/Player.png').convert_alpha()  # Cargar imagen con transparencia
-        self.image = pygame.transform.scale(self.image,(70,70))  # Escalar la imagen
+        self.image = pygame.transform.scale(self.image,(70,60))  # Escalar la imagen
         self.rect = self.image.get_rect()  # Obtiene el rectángulo del sprite
         self.rect.y = 225
         self.rect.x = 35
@@ -46,7 +50,20 @@ class Jugador(pygame.sprite.Sprite):
                 self.key_states[pygame.K_d] = True
         else:
             self.key_states[pygame.K_d] = False
+        
+        # restricciones para que el jugador no se salga del tablero
+        if self.rect.x > 515:
+            self.rect.x = 515
 
+        if self.rect.x < 35:
+            self.rect.x = 35
+
+        if self.rect.y > 225:
+            self.rect.y = 225
+
+        if self.rect.y < 20:
+            self.rect.y = 20  
+        
         i = self.rect.y // 72
         j = self.rect.x // 120
         self.visited[i][j] = True
