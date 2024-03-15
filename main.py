@@ -1,6 +1,7 @@
 import pygame
 import os
 
+#Carga de modelos de objetos
 from models.Jugador import Jugador
 from models.Wumpus import Wumpus
 from models.Tesoro import Tesoro
@@ -36,7 +37,6 @@ sprite_enemys = pygame.sprite.Group()
 sprite_player.add(jugador)
 
 sprite_enemys.add(tesoro)
-
 sprite_enemys.add(wumpus)
 sprite_enemys.add(pozo)
 
@@ -97,6 +97,9 @@ def draw_enemys():
             cord_y=(enemy.rect.y // 75)
         if jugador.visited[cord_y][cord_x]:
             screen.blit(enemy.image, (enemy.rect.x, enemy.rect.y))
+            enemy.has_collided = True
+        else:
+            enemy.has_collided = False
        # print(f'{enemy.imagePath} x={cord_x} y={cord_y} enemy=x:{enemy.rect.x} y:{enemy.rect.y}')
 
 # Función para dibujar imágenes de brisa alrededor del Pozo
@@ -106,6 +109,20 @@ def generate_brisa():
     sprite_enemys.add(Brisa(absolute_path,pozo.rect.x - STEP_X + 5, pozo.rect.y + 10))  # Izquierda del Pozo
     sprite_enemys.add(Brisa(absolute_path,pozo.rect.x + STEP_X + 5, pozo.rect.y + 10))  # Derecha del Pozo
 
+# Funcion para identificar si el jugador ha colisionado con el enemigo o el tesoro
+def check_collision():
+    for enemy in sprite_enemys:
+        if pygame.sprite.collide_rect(jugador, enemy):
+            if isinstance(enemy, Wumpus) and not enemy.has_collided:
+                print("Has sido devorado por el Wumpus")
+            if isinstance(enemy, Tesoro) and not enemy.has_collided:
+                print("Has encontrado el tesoro")
+            if isinstance(enemy, Pozo) and not enemy.has_collided:
+                print("Has caido en un pozo")
+            if isinstance(enemy, Hedor) and not enemy.has_collided:
+                print("Hueles un hedor cerca..")
+            if isinstance(enemy, Brisa) and not enemy.has_collided:
+                print("Sientes una brisa cerca..")
 
 # Función para el bucle principal del juego
 def game_screen():
@@ -120,6 +137,9 @@ def game_screen():
                 running = False
 
         sprite_player.update()  # Actualizar las posiciones de los sprites
+
+    # valida la colision con los enemigos
+        check_collision()
 
         screen.fill((255, 242, 255))  # Llenar la pantalla de negro
       #  screen.blit(image_tablero, (0, 0))
