@@ -17,7 +17,9 @@ class Pozo(pygame.sprite.Sprite):
 
     def reset_position(self, wumpus_rect, tesoro_rect):
         while True:
+            #genera coordenadas aleatorias
             self.rect.x = random.randint(0, 4) * STEP_X + 35
             self.rect.y = random.randint(0, 2) * STEP_Y + 15
+            #verifica si la posicion esta ocupada 
             if not self.rect.colliderect(wumpus_rect) and not self.rect.colliderect(tesoro_rect):
                 break

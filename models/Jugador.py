@@ -1,12 +1,10 @@
 import pygame
-import random
-
 
 class Jugador(pygame.sprite.Sprite):
     def __init__(self,path):
         super().__init__()
         self.name = ""
-        self.vidas = 1
+        self.vidas = 2
         self.municion = 1
         self.image = pygame.image.load(f'{path}/img/Player.png').convert_alpha()  # Cargar imagen con transparencia
         self.image = pygame.transform.scale(self.image,(70,60))  # Escalar la imagen
@@ -69,4 +67,10 @@ class Jugador(pygame.sprite.Sprite):
         self.visited[i][j] = True
         # print(f'{i}{j}---{self.visited[i][j]}')
 
-   
+def reset_position(self):
+        self.rect.y = 225
+        self.rect.x = 35
+        self.vidas = 2
+        self.municion = 1
+        self.key_states = {}
+        self.visited = [[False]*5 for _ in range(4)]

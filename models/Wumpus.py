@@ -10,7 +10,6 @@ class Wumpus(pygame.sprite.Sprite):
         super().__init__()
         self.has_collided = False
         self.imagePath=f'{path}/img/Wumpus.png'
-        # Carga la imagen del sprite (debe estar en el mismo directorio que este script)
         self.image = pygame.image.load(f'{path}/img/Wumpus.png').convert_alpha()
         self.image.set_colorkey((0,0,0))
         self.image = pygame.transform.scale(self.image,(70,60))
